@@ -3,7 +3,18 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": [
+      "jquery",
+      "lodash"
+    ],
+    "paths": {
+        "@app/*": ["src/app/*"],
+        "@environments/*": ["src/environments/*"]
+    }
+  },
+  "angularCompilerOptions": {
+      "fullTemplateTypeCheck": true,
+      "strictInjectionParameters": true
   },
   "files": [
     "src/main.ts",
