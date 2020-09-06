@@ -1,25 +1,29 @@
-<div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-  <div *ngIf="f.username.errors.required">** is required</div>
+<div *ngIf="isSubmitted && f.name.errors" class="invalid-feedback">
+  <div *ngIf="f.name.errors.required">** is required</div>
 </div>
 <form class="form-signin" [formGroup]="form" (ngSubmit)="onSubmit()">
   <img class="mb-4 signin-logo">
   <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
   <label for="input-name"
-         class="sr-only">User Name</label>
+         class="sr-only">
+       User Name
+  </label>
   <input type="text"
          id="input-name"
          class="form-control"
-         [ngClass]="{ 'is-invalid': submitted && f.username.errors }"
+         [ngClass]="{ 'is-invalid': isSubmitted && f.name.errors }"
          placeholder="User name"
          required
          autofocus
          formControlName="name">
   <label for="input-password"
-         class="sr-only">Password</label>
+         class="sr-only">
+       Password
+  </label>
   <input type="password"
          id="input-password"
          class="form-control"
-         [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+         [ngClass]="{ 'is-invalid': isSubmitted && f.password.errors }"
          placeholder="Password"
          required
          formControlName="password">
