@@ -3,31 +3,39 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AccountService } from '@app/_services_';
+import { comparePassword } from '@app/_helpers_';
+import { User } from '@app/_models_';
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.scss']
+    selector: 'app-register',
+    templateUrl: './register.component.html',
+    styleUrls: ['./register.component.scss']
 })
 
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
     form: FormGroup;
     returnUrl: string;
 
     isLoading = false;
     isSubmitted = false;
-  
-    constructor (
+
+    constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private accountService: AccountService,
-    ) { }
+        private accountService: AccountService
+    ) {}
 
     ngOnInit(): void {
         this.form = this.formBuilder.group({
-            name: ['', Validators.required],
-            password: ['', Validators.required]
+            name: ['', [Validators.required, Validators.maxLength(32)]],
+            email: ['', [Validators.required, Validators.email]],
+            password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(512)]],
+            confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(512)]]
+        },
+        {
+          // Used custom form validator
+          validator: comparePassword()
         });
 
         // get return url from route parameters or default to '/'
@@ -49,24 +57,22 @@ export class LoginComponent implements OnInit {
         if (this.form.invalid) {
             return;
         }
+
+        let formData = this.form.getRawValue();
+        formData['confirmed_password'] = formData.confirmPassword;
         
-        this.accountService.login(this.f.name.value, this.f.password.value)
+        delete formData.confirmPassword;
+        
+        this.accountService.register(formData)
             .pipe(first())
             .subscribe(
                 data => {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    console.log("Error => ", error);
+                    console.error("Error => ", error);
                     // this.alertService.error(error);
                     this.isLoading = false;
                 });
-    }
-
-    /**
-     * 
-     */
-    redirectToRegister() {
-        this.router.navigate(['/register']);
     }
 }

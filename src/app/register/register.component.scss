@@ -1,0 +1,83 @@
+.register-logo {
+    width: 72;
+    height: 72;
+    alt: "";
+    src: "";
+}
+.register-form-header {
+    border-bottom: solid #007bff;
+}
+.form-register {
+    width: 100%;
+    max-width: 330px;
+    padding: 250px 15px 15px 15px;
+    margin: auto;
+}
+.form-register .checkbox {
+    font-weight: 400;
+}
+.form-register .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+    width: 250px;
+
+    &.user,
+    &.email,
+    &.password {
+        float: right;
+        margin-bottom: 5px;
+    }
+
+    &.confirm-password {
+        float: right;
+        margin-bottom: 10px;
+    }
+}
+.form-register .form-control:focus {
+    z-index: 2;
+}
+.form-register input[type="text"] {
+    margin-bottom: -1px;
+}
+.copyright {
+    text-align: center;
+}
+.btn-register,
+.btn-register:hover {
+    color: white;
+}
+.user-icon,
+.email-icon,
+.password-icon {
+    width: 40px;
+}
+
+li {
+    font-size: 35px;
+
+    &.user {
+        list-style: url("/assets/images/account/user_circle.svg");
+    }
+
+    &.email {
+        list-style: url("/assets/images/account/email.svg");
+    }
+
+    &.password {
+        list-style: url("/assets/images/account/lock.svg");
+    }
+
+    &.confirm-password {
+        list-style: url("/assets/images/account/lock.svg");
+    }
+}
+.back-to-login {
+    &::before {
+        content: url("/assets/images/common/arrow_back.svg");
+        position: relative;
+        top: 5px;
+    }
+}

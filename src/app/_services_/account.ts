@@ -71,9 +71,9 @@ export class AccountService {
     /**
      * Register action
      * 
-     * @param user user object
+     * @param user Object
      */
-    register(user: User) {
+    register(user: Object) {
         return this.http.post(`${environment.apiUrl}/user/register`, user);
     }
 
