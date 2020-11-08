@@ -1,3 +1,6 @@
+$accountImgPath: "/assets/images/account/";
+$commonImgPath: "/assets/images/common/";
+
 .register-logo {
     width: 72;
     height: 72;
@@ -59,24 +62,24 @@ li {
     font-size: 35px;
 
     &.user {
-        list-style: url("/assets/images/account/user_circle.svg");
+        list-style: url($accountImgPath + "user_circle.svg");
     }
 
     &.email {
-        list-style: url("/assets/images/account/email.svg");
+        list-style: url($accountImgPath + "email.svg");
     }
 
     &.password {
-        list-style: url("/assets/images/account/lock.svg");
+        list-style: url($accountImgPath + "lock.svg");
     }
 
     &.confirm-password {
-        list-style: url("/assets/images/account/lock.svg");
+        list-style: url($accountImgPath + "lock.svg");
     }
 }
 .back-to-login {
     &::before {
-        content: url("/assets/images/common/arrow_back.svg");
+        content: url($commonImgPath + "arrow_back.svg");
         position: relative;
         top: 5px;
     }

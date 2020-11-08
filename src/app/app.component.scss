@@ -64,8 +64,8 @@ span {
 }
 
 #sidebar.active {
-    min-width: 80px;
-    max-width: 80px;
+    min-width: 100px;
+    max-width: 100px;
     text-align: center;
 }
 
@@ -177,10 +177,19 @@ a.article:hover {
 #sidebar-sign-out {
     position: absolute;
     right: 10px;
+
+    i {
+        color: #17a2b8;
+    }
 }
 
-#sidebar-sign-out > i {
-    color: #17a2b8;
+#sidebar-change-language {
+    position: absolute;
+    right: 50px;
+
+    i {
+        color: #17a2b8;
+    }
 }
 
 /* ---------------------------------------------------

@@ -37,4 +37,11 @@ export class AppComponent implements OnInit {
     logout() {
         this.accountService.logout();
     }
+
+    /**
+     * switch language
+     */
+    switchLangyage() {
+
+    }
 }

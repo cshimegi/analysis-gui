@@ -23,7 +23,8 @@
     "types": [
       "jquery",
       "lodash",
-      "jasmine"
+      "jasmine",
+      "d3"
     ]
   },
   "angularCompilerOptions": {
