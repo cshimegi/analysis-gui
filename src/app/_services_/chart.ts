@@ -14,10 +14,11 @@ export class ChartService {
      * Draw sine curve
      * 
      * @param elementId 
+     * @param options
      */
-    drawSineCurve(elementId) {
-        let width = 600,
-            height = 300,
+    drawSineCurve(elementId, options) {
+        let width = options.width,
+            height = options.height,
             margin = 50;
         let svg = d3.select('#' + elementId)
             .append('svg')

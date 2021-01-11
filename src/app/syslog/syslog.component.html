@@ -2,5 +2,21 @@
   <div id="chart-svg"></div>
 </div>
 <div class="log-table">
-  <div id="table-list"></div>
+  <div id="table-list">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th *ngFor="let column of columns" (click)="sortByColumnName(column)">{{ column | uppercase }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let userLog of userLogData | orderBy: columnName">
+  	      <td>{{userLog.id}}</td>
+  	      <td>{{userLog.name}}</td>
+  	      <td>{{userLog.login_date}}</td>
+          <td>{{userLog.logout_date}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

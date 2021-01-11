@@ -14,6 +14,8 @@ import { AboutComponent } from './about/about.component';
 import { MonitorComponent } from './monitor/monitor.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 
+import { OrderBy } from './_pipes_/orderBy.pipe';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -23,7 +25,8 @@ import { ScheduleComponent } from './schedule/schedule.component';
         SyslogComponent,
         AboutComponent,
         MonitorComponent,
-        ScheduleComponent
+        ScheduleComponent,
+        OrderBy
     ],
     imports: [
         BrowserModule,

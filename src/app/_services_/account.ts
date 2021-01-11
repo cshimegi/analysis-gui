@@ -44,10 +44,8 @@ export class AccountService {
         
         return this.http.post<Error|User>(`${environment.apiUrl}/user/login`, payload)
             .pipe(map((data: any) => {
-                if (data.code === StatusCodes.BAD_REQUEST || 
-                    data.code === StatusCodes.INTERNAL_SERVER_ERROR)
-                {
-                    return Error(data.eror);
+                if (data.code !== StatusCodes.OK) {
+                    return Error(data.error);
                 }
 
                 // store user details in local storage to keep user logged in between page refreshes
