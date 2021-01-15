@@ -15,6 +15,9 @@ import { MonitorComponent } from './monitor/monitor.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 
 import { OrderBy } from './_pipes_/orderBy.pipe';
+import { Replace } from './_pipes_/replace.pipe';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from '@app/_helpers_';
 
 @NgModule({
     declarations: [
@@ -26,7 +29,8 @@ import { OrderBy } from './_pipes_/orderBy.pipe';
         AboutComponent,
         MonitorComponent,
         ScheduleComponent,
-        OrderBy
+        OrderBy,
+        Replace
     ],
     imports: [
         BrowserModule,
@@ -34,7 +38,13 @@ import { OrderBy } from './_pipes_/orderBy.pipe';
         HttpClientModule,
         ReactiveFormsModule
     ],
-    providers: [],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: TokenInterceptor,
+            multi: true
+        }
+    ],
     bootstrap: [AppComponent]
 })
 

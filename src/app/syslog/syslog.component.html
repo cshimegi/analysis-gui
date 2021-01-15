@@ -3,18 +3,24 @@
 </div>
 <div class="log-table">
   <div id="table-list">
-    <table class="table table-bordered">
-      <thead>
+    <table class="table table-bordered shadow">
+      <thead class="log-table-head">
         <tr>
-          <th *ngFor="let column of columns" (click)="sortByColumnName(column)">{{ column | uppercase }}</th>
+          <th *ngFor="let column of columns">
+            <scan class="sortable {{column | replace:'space':'hyphen'}}"
+                  [ngClass]="sortColumn == column ? order : ''"
+                  (click)="sortByColumnName(column)">
+              {{ column | uppercase }}
+            </scan>
+          </th>
         </tr>
       </thead>
-      <tbody>
-        <tr *ngFor="let userLog of userLogData | orderBy: columnName">
+      <tbody class="log-table-body">
+        <tr *ngFor="let userLog of userLogs | orderBy:sortColumn:order">
   	      <td>{{userLog.id}}</td>
-  	      <td>{{userLog.name}}</td>
-  	      <td>{{userLog.login_date}}</td>
-          <td>{{userLog.logout_date}}</td>
+  	      <td>{{userLog.user.username}}</td>
+  	      <td>{{userLog.user.authorityName}}</td>
+          <td>{{userLog.loggedTime | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
         </tr>
       </tbody>
     </table>

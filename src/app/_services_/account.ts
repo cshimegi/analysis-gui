@@ -2,14 +2,21 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { StatusCodes } from 'http-status-codes';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { environment } from '@environments/environment';
-import { User } from '@app/_models_';
+import { User, UserLog } from '@app/_models_';
+
+const API_URL = environment.apiUrl;
+const AUTHORIT_LABELS = {1: 'General', 99: 'Admin'};
 
 @Injectable({ providedIn: 'root' })
 
 export class AccountService {
+    private readonly userBaseApi: string = API_URL + "/user";
+    private readonly userLoginApi: string = this.userBaseApi + "/login";
+    private readonly userRegisterApi: string = this.userBaseApi + "/register";
+    private readonly userLogApi: string = API_URL + "/user_log/";
     private userSubject: BehaviorSubject<User>;
     public user: Observable<User>;
 
@@ -22,10 +29,12 @@ export class AccountService {
     }
 
     /**
+     * User Getter
      * 
      * @returns User
      */
-    public get userValue(): User {
+    public get userValue(): User
+    {
         return this.userSubject.value;
     }
 
@@ -36,32 +45,40 @@ export class AccountService {
      * @param password 
      * @returns Error|User
      */
-    login(username: string, password: string) {
+    login(username: string, password: string)
+    {
         let payload = {
             name: username,
             password: password
         };
         
-        return this.http.post<Error|User>(`${environment.apiUrl}/user/login`, payload)
-            .pipe(map((data: any) => {
-                if (data.code !== StatusCodes.OK) {
-                    return Error(data.error);
-                }
+        return this.http.post<Error|User>(this.userLoginApi, payload)
+            .pipe(
+                map((data: any) => {
+                    if (data.code !== StatusCodes.OK) {
+                        return Error(data.error);
+                    }
 
-                // store user details in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(data.user));
-                this.userSubject.next(data.user);
-                
-                return data.user;
-            }));
+                    // store user details in local storage to keep user logged in between page refreshes
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    this.userSubject.next(data.user);
+                    
+                    return data.user;
+                }),
+                catchError(error => {
+                    console.error(error);
+                    return of([]);
+                })
+            );
     }
 
     /**
      * Logout action
      */
-    logout() {
+    logout()
+    {
         // remove user from local storage and set current user to null
-        localStorage.removeItem('user');
+        localStorage.clear();
         this.userSubject.next(null);
         this.router.navigate(['/login']);
     }
@@ -71,15 +88,17 @@ export class AccountService {
      * 
      * @param user Object
      */
-    register(user: Object) {
-        return this.http.post(`${environment.apiUrl}/user/register`, user);
+    register(user: Object)
+    {
+        return this.http.post(this.userRegisterApi, user);
     }
 
     /**
      * Get all users
      */
-    getAll() {
-        return this.http.get<User[]>(`${environment.apiUrl}/user`);
+    getAll(): Observable<User[]>
+    {
+        return this.http.get<User[]>(this.userBaseApi);
     }
 
     /**
@@ -87,8 +106,9 @@ export class AccountService {
      * 
      * @param id user id
      */
-    getById(id: bigint) {
-        return this.http.get<User>(`${environment.apiUrl}/user/${id}`);
+    getById(id: bigint)
+    {
+        return this.http.get<User>(`${this.userBaseApi}/${id}`);
     }
     
     /**
@@ -97,8 +117,10 @@ export class AccountService {
      * @param id user id
      * @param params all parameters for updating
      */
-    update(id: bigint, params: any) {
-        return this.http.put(`${environment.apiUrl}/user/${id}`, params)
+    update(id: bigint, params: any)
+    {
+        return this.http
+            .put(`${this.userBaseApi}/${id}`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
                 if (id === this.userValue.id) {
@@ -120,15 +142,17 @@ export class AccountService {
      * @param id user id
      * @param params only parameters for updating
      */
-    partialUpdate(id: bigint, params: any) {
-        return this.http.patch(`${environment.apiUrl}/user/${id}`, params)
+    partialUpdate(id: bigint, params: any)
+    {
+        return this.http
+            .patch(`${this.userBaseApi}/${id}`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
                 if (id === this.userValue.id) {
                     // update local storage
                     const user = {...this.userValue, ...params};
+                    
                     localStorage.setItem('user', JSON.stringify(user));
-
                     // publish updated user to subscribers
                     this.userSubject.next(user);
                 }
@@ -142,8 +166,10 @@ export class AccountService {
      * 
      * @param id user id
      */
-    delete(id: bigint) {
-        return this.http.delete(`${environment.apiUrl}/user/${id}`)
+    delete(id: bigint)
+    {
+        return this.http
+            .delete(`${this.userBaseApi}/${id}`)
             .pipe(map(x => {
                 // auto logout if the logged in user deleted their own record
                 if (id === this.userValue.id) {
@@ -152,5 +178,23 @@ export class AccountService {
 
                 return x;
             }));
+    }
+
+    /**
+     * Get all user logs
+     */
+    getAllUserLogs(): Observable<UserLog[]>
+    {
+        return this.http.get<UserLog[]>(this.userLogApi);
+    }
+
+    /**
+     * Get authority name by its value
+     * 
+     * @param authority 
+     */
+    getAuthorityName(authority: number): string
+    {
+        return AUTHORIT_LABELS[authority]
     }
 }

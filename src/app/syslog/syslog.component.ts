@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ChartService } from '@app/_services_';
-import * as  _ from 'lodash';
+import { ChartService, AccountService } from '@app/_services_';
+import { UserLog } from '@app/_models_';
+import { map } from 'rxjs/operators';
 
+declare var $: any;
 @Component({
     selector: 'app-syslog',
     templateUrl: './syslog.component.html',
@@ -9,17 +11,27 @@ import * as  _ from 'lodash';
 })
 
 export class SyslogComponent implements OnInit {
-    columns = ['id', 'name', 'login date', 'logout date'];
-    userLogData = [
-        {'id': 1, 'name': 'alan', 'login_date': '2020/12/31 15:12:33', 'logout_date': '2021/01/01 15:12:33'},
-        {'id': 2, 'name': 'alan2', 'login_date': '2020/12/31 19:12:53', 'logout_date': '2021/01/04 11:12:33'}
-    ];
-    columnName: string = 'id';
+    columns = ['id', 'name', 'authority', 'loggedTime'];
+    userLogs: UserLog[];
+    sortColumn: string = 'id';
     order: string = 'asc';
 
     constructor(
-        private chartServie: ChartService
-    ) {}
+        private chartServie: ChartService,
+        private accountService: AccountService
+    ) {
+        this.accountService.getAllUserLogs()
+            .pipe(
+                map(logs => logs.map(log => {
+                    log.user.authorityName = this.accountService.getAuthorityName(log.user.authority);
+                    log.loggedTime = log['logged_time'];
+
+                    delete log['logged_time'];
+
+                    return log as UserLog
+                }))
+            ).subscribe(logs => this.userLogs = logs);
+    }
 
     ngOnInit(): void {
         this.chartServie.drawSineCurve('chart-svg', {
@@ -27,14 +39,15 @@ export class SyslogComponent implements OnInit {
         });
     }
 
+    /**
+     * Sort table data by column name
+     * 
+     * @param columnName 
+     */
     sortByColumnName(columnName: string) {
-        this.columnName = columnName;
-
-        if (this.order === 'desc') {
-            this.userLogData.reverse();
-            this.order = 'asc';
-        } else {
-            this.order = 'desc';
-        }
+        $(this.sortColumn).removeClass(this.order);
+        this.sortColumn = columnName;
+        this.order = this.order === 'desc' ? 'asc' : 'desc';
+        $(this.sortColumn).addClass(this.order);
     }
 }

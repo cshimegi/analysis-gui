@@ -5,20 +5,24 @@ import { Pipe, PipeTransform } from "@angular/core";
 })
 
 export class OrderBy implements PipeTransform {
-    transform(array: any, field: string): any[] {
+    transform(array: any, column: string, order: string): any[] {
         if (!Array.isArray(array)) {
             return;
         }
 
         array.sort((a: any, b: any) => {
-            if (a[field] < b[field]) {
+            if (a[column] < b[column]) {
                 return -1;
-            } else if (a[field] > b[field]) {
+            } else if (a[column] > b[column]) {
                 return 1;
             } else {
                 return 0;
             }
         });
+        
+        if (order === 'desc') {
+            array.reverse();
+        }
 
         return array;
     }

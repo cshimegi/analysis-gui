@@ -1,9 +1,36 @@
-.log-chart,
+$commonImagePath: '../../assets/images/common';
+
+.log-chart {
+    width: 100%;
+    height: 450px;
+    margin-bottom: 50px;
+}
 .log-table {
     width: 100%;
     height: 450px;
+    text-overflow: ellipsis;
 }
+.log-table-body {
+    height: 100%;
+    overflow-y: scroll;
+}
+.sortable {
+    border-bottom: 2px blue solid;
+    cursor: pointer;
 
-.log-chart {
-    margin-bottom: 50px;
+    &::before {
+        content: url($commonImagePath + '/sort.svg');
+    }
+
+    &.asc {
+        &::before {
+            content: url($commonImagePath + '/arrow_up_type_2.svg');
+        }
+    }
+
+    &.desc {
+        &::before {
+            content: url($commonImagePath + '/arrow_down_type_2.svg');
+        }
+    }
 }

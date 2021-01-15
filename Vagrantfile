@@ -17,9 +17,6 @@ Vagrant.configure("2") do |config|
   # Box version
   config.vm.box_version = "202012.27.0"
 
-  # speed up apt-get
-  # config.cache.auto_detect = true
-
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
