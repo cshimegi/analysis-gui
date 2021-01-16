@@ -12,11 +12,16 @@ export class TokenInterceptor implements HttpInterceptor {
     ) {}
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        request = request.clone({
-            setHeaders: {
-                Authorization: `Bearer ${this.authService.getToken()}`
-            }
-        });
+        const IsFromLogin = request.body && request.body.hasOwnProperty('isLogin') ? request.body.isLogin : false;
+        const IsFromRegister = request.body && request.body.hasOwnProperty('isRegister') ? request.body.isRegister : false;
+
+        if (!IsFromLogin && !IsFromRegister) {
+            request = request.clone({
+                setHeaders: {
+                    Authorization: `Bearer ${this.authService.getToken()}`
+                }
+            });
+        }
 
         return next.handle(request);
     }

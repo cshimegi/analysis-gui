@@ -5,9 +5,9 @@ import tokenNotExpired from 'jwt-decode';
 
 export class AuthService {
 
-    public getToken(): string {
+    public getToken(): string|null {
         const user = JSON.parse(localStorage.getItem('user'));
-        return user.token;
+        return user ? user.token : null;
     }
 
     public isAuthenticated(): boolean {
