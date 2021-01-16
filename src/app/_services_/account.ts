@@ -49,7 +49,8 @@ export class AccountService {
     {
         let payload = {
             name: username,
-            password: password
+            password: password,
+            isLogin: true
         };
         
         return this.http.post<Error|User>(this.userLoginApi, payload)
@@ -90,6 +91,7 @@ export class AccountService {
      */
     register(user: Object)
     {
+        user['isRegister'] = true;
         return this.http.post(this.userRegisterApi, user);
     }
 
