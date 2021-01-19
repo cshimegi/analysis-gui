@@ -22,9 +22,7 @@
     },
     "types": [
       "jquery",
-      "lodash",
-      "jasmine",
-      "d3"
+      "jasmine"
     ]
   },
   "angularCompilerOptions": {
