@@ -11,9 +11,7 @@ export function comparePassword() {
         const passwordControl = formGroup.controls["password"];
         const confirmPasswordControl = formGroup.controls["confirmPassword"];
         
-        if (confirmPasswordControl.errors && !confirmPasswordControl.errors.noMatch) {
-            return;
-        }
+        if (confirmPasswordControl.errors && !confirmPasswordControl.errors.noMatch) return;
         
         if (passwordControl.value !== confirmPasswordControl.value) {
             confirmPasswordControl.setErrors({noMatch: true});
