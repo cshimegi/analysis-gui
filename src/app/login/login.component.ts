@@ -26,8 +26,16 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {
         this.form = this.formBuilder.group({
-            name: ['', Validators.required],
-            password: ['', Validators.required]
+            name: ['', [
+                Validators.required,
+                Validators.pattern('[-\w]+'),
+                Validators.minLength(8),
+                Validators.maxLength(32)
+            ]],
+            password: ['', [
+                Validators.required,
+                Validators.minLength(8)
+            ]]
         });
 
         // get return url from route parameters or default to '/'
@@ -45,10 +53,8 @@ export class LoginComponent implements OnInit {
     onSubmit() {
         this.isSubmitted = true;
         this.isLoading = true;
-
-        if (this.form.invalid) {
-            return;
-        }
+        
+        if (this.form.invalid) return;
         
         this.accountService.login(this.f.name.value, this.f.password.value)
             .pipe(first())
@@ -57,7 +63,7 @@ export class LoginComponent implements OnInit {
                     this.router.navigate([this.returnUrl]);
                 },
                 error => {
-                    console.log("Error => ", error);
+                    console.error("Error => ", error);
                     // this.alertService.error(error);
                     this.isLoading = false;
                 });

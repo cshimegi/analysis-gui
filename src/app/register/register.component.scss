@@ -13,8 +13,9 @@ $commonImgPath: "/assets/images/common/";
 .form-register {
     width: 100%;
     max-width: 330px;
-    padding: 250px 15px 15px 15px;
+    padding: 0px 15px 15px 15px;
     margin: auto;
+    padding-top: 10%;
 }
 .form-register .checkbox {
     font-weight: 400;
@@ -82,5 +83,58 @@ li {
         content: url($commonImgPath + "arrow_back.svg");
         position: relative;
         top: 5px;
+    }
+}
+/***************************************
+ * Form invalid
+ ***************************************/
+.register {
+    &-name-invalid,
+    &-email-invalid,
+    &-password-invalid,
+    &-confirm-password-invalid {
+        position: relative;
+        left: 260px;
+        background-color: transparent;
+
+        .text-danger {
+            position: absolute;
+            
+            &::before {
+                content: "* ";
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    li {
+        &.user,
+        &.email,
+        &.password,
+        &.confirm-password {
+            &.invalid {
+                margin-bottom: 30px;
+            }
+        }
+    }
+    .register {
+        &-name-invalid,
+        &-email-invalid,
+        &-password-invalid,
+        &-confirm-password-invalid {
+            position: relative;
+            top: 50px;
+            left: 0px;
+            background-color: transparent;
+    
+            .text-danger {
+                position: absolute;
+                
+                &::before {
+                    content: "* ";
+                }
+            }
+        }
     }
 }

@@ -4,7 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { AccountService } from '@app/_services_';
 import { comparePassword } from '@app/_helpers_';
-import { User } from '@app/_models_';
+
+declare var $: any;
 
 @Component({
     selector: 'app-register',
@@ -28,10 +29,26 @@ export class RegisterComponent implements OnInit {
 
     ngOnInit(): void {
         this.form = this.formBuilder.group({
-            name: ['', [Validators.required, Validators.maxLength(32)]],
-            email: ['', [Validators.required, Validators.email]],
-            password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(512)]],
-            confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(512)]]
+            name: ['', [
+                Validators.required,
+                Validators.pattern('[-\w]+'),
+                Validators.minLength(8),
+                Validators.maxLength(32)
+            ]],
+            email: ['', [
+                Validators.required,
+                Validators.email
+            ]],
+            password: ['', [
+                Validators.required,
+                Validators.minLength(8),
+                Validators.maxLength(32)
+            ]],
+            confirmPassword: ['', [
+                Validators.required,
+                Validators.minLength(8),
+                Validators.maxLength(32)
+            ]]
         },
         {
           // Used custom form validator
@@ -53,16 +70,13 @@ export class RegisterComponent implements OnInit {
     onSubmit() {
         this.isSubmitted = true;
         this.isLoading = true;
-
-        if (this.form.invalid) {
-            return;
-        }
+        console.log(this.form)
+        if (this.form.invalid) return;
 
         let formData = this.form.getRawValue();
         formData['confirmed_password'] = formData.confirmPassword;
         
         delete formData.confirmPassword;
-        
         this.accountService.register(formData)
             .pipe(first())
             .subscribe(

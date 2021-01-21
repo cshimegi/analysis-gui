@@ -4,6 +4,9 @@
     alt: "";
     src: "";
 }
+.login-header{
+    border-bottom: 2px solid deepskyblue;
+}
 .form-signin {
     width: 100%;
     max-width: 330px;
@@ -40,4 +43,9 @@
 .btn-register,
 .btn-register:hover {
     color: white;
+}
+.text-danger {
+    &::before {
+        content: "* ";
+    }
 }

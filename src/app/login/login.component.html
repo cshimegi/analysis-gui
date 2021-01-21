@@ -1,9 +1,6 @@
-<div *ngIf="isSubmitted && f.name.errors" class="invalid-feedback">
-  <div *ngIf="f.name.errors.required">Name is required</div>
-</div>
 <form class="form-signin" [formGroup]="form" (ngSubmit)="onSubmit()">
   <img class="mb-4 signin-logo">
-  <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+  <h1 class="h3 mb-3 font-weight-normal login-header">Please sign in</h1>
   <label for="input-name" class="sr-only">User Name</label>
   <input type="text"
          id="input-name"
@@ -13,6 +10,18 @@
          required
          autofocus
          formControlName="name">
+  <div *ngIf="isSubmitted && f.name.errors" class="invalid-feedback">
+    <small class="text-danger" *ngIf="f.name.errors.required">Name is required<br></small>
+    <small class="text-danger" *ngIf="f.name.errors.minlength">
+      At least {{f.name.errors.minlength.requiredLength}} characters are required<br>
+    </small>
+    <small class="text-danger" *ngIf="f.name.errors.maxlength">
+      At most {{f.name.errors.maxlength.requiredLength}} characters are supported<br>
+    </small>
+    <small class="text-danger" *ngIf="f.name.errors.pattern">
+      Only alphabet, numbers, hyphen and underscore are supported
+    </small>
+  </div>
   <label for="input-password" class="sr-only">Password</label>
   <input type="password"
          id="input-password"
@@ -21,6 +30,12 @@
          placeholder="Password"
          required
          formControlName="password">
+  <div *ngIf="isSubmitted && f.password.errors" class="invalid-feedback">
+    <small class="text-danger" *ngIf="f.password.errors.required">Password is required<br></small>
+    <small class="text-danger" *ngIf="f.password.errors.minlength">
+      At least {{f.password.errors.minlength.requiredLength}} characters are required
+    </small>
+  </div>
   <div class="checkbox mb-3">
     <label>
       <input type="checkbox" value="remember-me"> Remember me
