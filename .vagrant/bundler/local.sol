@@ -1,1 +1,0 @@
-{"dependencies":[["vagrant-fsnotify",["= 0.3.1"]]],"checksum":"d66e3a3d1bd1195a1ce148b1b16fcf7096149d4bb74720b5c6b2eea7d560b6f2","vagrant_version":"2.2.14"}

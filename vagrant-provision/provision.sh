@@ -6,6 +6,12 @@ echo "====================End of Updating apt-get========================="
 echo "==================Update apt-get================================"
 sudo apt install apache2
 sudo a2enmod rewrite # enable rewrite engine
+sudo cp /vagrant/vagrant-provision/vhost.conf /etc/apache2/sites-available/angular.conf
+sudo cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.orig
+sudo cp /vagrant/vagrant-provision/apache2.conf /etc/apache2/apache2.conf
+sudo a2ensite angular.conf
+sudo a2dsssite 000-default.conf
+sudo systemctl restart apache2
 echo "====================End of Updating apt-get========================="
 
 cd /vagrant
