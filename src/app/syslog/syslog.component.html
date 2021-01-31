@@ -2,27 +2,36 @@
   <canvas id="chart-canvas" style="width: 100%;height: 100%;"></canvas>
 </div>
 <div class="log-table">
-  <div id="table-list" class="table-responsive">
-    <table class="table table-bordered shadow">
-      <thead class="thead-light log-table-head">
-        <tr>
-          <th *ngFor="let column of columns">
-            <scan class="sortable {{column | replace:'space':'hyphen'}}"
-                  [ngClass]="sortColumn == column ? order : ''"
-                  (click)="sortByColumnName(column)">
-              {{ column | uppercase }}
-            </scan>
-          </th>
-        </tr>
-      </thead>
-      <tbody class="log-table-body">
-        <tr *ngFor="let userLog of userLogs | orderBy:sortColumn:order">
-  	      <td>{{userLog.id}}</td>
-  	      <td>{{userLog.user.username}}</td>
-  	      <td>{{userLog.user.authorityName}}</td>
-          <td>{{userLog.loggedTime | date: 'yyyy-MM-dd hh:mm:ss'}}</td>
-        </tr>
-      </tbody>
-    </table>
+  <mat-paginator #paginator
+                 [length]="count"
+                 [pageIndex]="0"
+                 [pageSize]="6"
+                 [pageSizeOptions]="[3, 6, 9]"
+                 showFirstLastButtons></mat-paginator>
+  <div *ngIf="loading">
+    <mat-spinner class="center"></mat-spinner>
   </div>
+  <mat-table class="table table-bordered table-responsive shadow"
+             [dataSource]="userLogDataSource"
+             matSort
+             #sortTable="matSort">
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="username">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>User Name</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.user.username }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="authority">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Authority</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.user.authorityName }}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="loggedTime">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Logged Time</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{ row.loggedTime | date: 'yyyy-MM-dd hh:mm:ss' }}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let userLogRow; columns: columns"></mat-row>
+  </mat-table>
 </div>
