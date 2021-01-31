@@ -183,11 +183,30 @@ export class AccountService {
     }
 
     /**
-     * Get all user logs
+     * Get user logs
      */
-    getAllUserLogs(): Observable<UserLog[]>
+    getUserLogsFromDate(params: any): Observable<UserLog[]>
     {
-        return this.http.get<UserLog[]>(this.userLogApi);
+        const options = {
+            params: params
+        };
+
+        return this.http.get<UserLog[]>(this.userLogApi, options);
+    }
+
+    /**
+     * Get user logs
+     */
+    getUserLogs(pageIndex: number, params: any): Observable<UserLog[]>
+    {
+        const options = {
+            params: params
+        };
+
+        return this.http.get<UserLog[]>(
+            this.userLogApi + `?page=${pageIndex+1}`,
+            options
+        );
     }
 
     /**

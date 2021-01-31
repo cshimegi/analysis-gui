@@ -24,4 +24,20 @@ export class DateService {
 
         return recordArr;
     }
+
+    getUnixDatetime(datetime?: string): number
+    {
+        return moment(datetime).unix();
+    }
+
+    getPastDatetime(daysAgo: number): Date
+    {
+        return moment().add(-daysAgo, 'days').toDate();
+    }
+
+    getStringPastDatetime(daysAgo: number): string
+    {
+        return this.getPastDatetime(daysAgo).toISOString();
+    }
+
 }

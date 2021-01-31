@@ -10,30 +10,12 @@ $commonImagePath: '../../assets/images/common';
     height: 250px;
     text-overflow: ellipsis;
 }
-.log-table-body {
-    height: 100%;
-    overflow-y: scroll;
-}
 mat-header-row {
     background-color: powderblue;
+    font-size: 20px;
+    font-weight: bold;
 }
-.sortable {
-    border-bottom: 2px blue solid;
-    cursor: pointer;
-
-    &::before {
-        content: url($commonImagePath + '/sort.svg');
-    }
-
-    &.asc {
-        &::before {
-            content: url($commonImagePath + '/arrow_up_type_2.svg');
-        }
-    }
-
-    &.desc {
-        &::before {
-            content: url($commonImagePath + '/arrow_down_type_2.svg');
-        }
-    }
+.table {
+    max-height: 400px;
+    overflow-y: scroll;
 }

@@ -2,11 +2,19 @@
   <canvas id="chart-canvas" style="width: 100%;height: 100%;"></canvas>
 </div>
 <div class="log-table">
+  <mat-paginator #paginator
+                 [length]="count"
+                 [pageIndex]="0"
+                 [pageSize]="6"
+                 [pageSizeOptions]="[3, 6, 9]"
+                 showFirstLastButtons></mat-paginator>
+  <div *ngIf="loading">
+    <mat-spinner class="center"></mat-spinner>
+  </div>
   <mat-table class="table table-bordered table-responsive shadow"
              [dataSource]="userLogDataSource"
              matSort
-             #sortTable="matSort"
-             (matSortChange)="doSort($event)">
+             #sortTable="matSort">
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
       <mat-cell *matCellDef="let row">{{ row.id }}</mat-cell>
