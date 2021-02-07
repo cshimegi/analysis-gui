@@ -10,6 +10,9 @@ $commonImgPath: "/assets/images/common/";
 .register-form-header {
     border-bottom: solid #007bff;
 }
+.internal-server-error {
+    font-size: 16px;
+}
 .form-register {
     width: 100%;
     max-width: 330px;
@@ -53,30 +56,41 @@ $commonImgPath: "/assets/images/common/";
 .btn-register:hover {
     color: white;
 }
+
+/***************************************
+ * Form invalid
+ ***************************************/
+$backgroundRepeat: no-repeat;
+$backgroundPosition: center;
+$backgroundDisplay: block;
+$backgroundHeight: 24px;
+
 .user-icon,
 .email-icon,
 .password-icon {
     width: 40px;
 }
+.user-icon {
+    background-image: url($accountImgPath + "user_circle.svg");
+    background-repeat: $backgroundRepeat;
+    background-position: $backgroundPosition;
+    display: $backgroundDisplay;
+    height: $backgroundHeight;
+}
+.email-icon {
+    background-image: url($accountImgPath + "email.svg");
+    background-repeat: $backgroundRepeat;
+    background-position: $backgroundPosition;
+    display: $backgroundDisplay;
+    height: $backgroundHeight;
+}
 
-li {
-    font-size: 35px;
-
-    &.user {
-        list-style: url($accountImgPath + "user_circle.svg");
-    }
-
-    &.email {
-        list-style: url($accountImgPath + "email.svg");
-    }
-
-    &.password {
-        list-style: url($accountImgPath + "lock.svg");
-    }
-
-    &.confirm-password {
-        list-style: url($accountImgPath + "lock.svg");
-    }
+.password-icon {
+    background-image: url($accountImgPath + "lock.svg");
+    background-repeat: $backgroundRepeat;
+    background-position: $backgroundPosition;
+    display: $backgroundDisplay;
+    height: $backgroundHeight;
 }
 .back-to-login {
     &::before {
@@ -88,52 +102,23 @@ li {
 /***************************************
  * Form invalid
  ***************************************/
+table.confirmPasswordError {
+    margin-bottom: 10px;
+}
+
 .register {
     &-name-invalid,
     &-email-invalid,
     &-password-invalid,
     &-confirm-password-invalid {
-        position: relative;
-        left: 260px;
+        padding-left: 5px;
         background-color: transparent;
 
         .text-danger {
-            position: absolute;
-            
+            font-size: 16px;
+
             &::before {
                 content: "* ";
-            }
-        }
-    }
-}
-
-@media (max-width: 768px) {
-    li {
-        &.user,
-        &.email,
-        &.password,
-        &.confirm-password {
-            &.invalid {
-                margin-bottom: 30px;
-            }
-        }
-    }
-    .register {
-        &-name-invalid,
-        &-email-invalid,
-        &-password-invalid,
-        &-confirm-password-invalid {
-            position: relative;
-            top: 50px;
-            left: 0px;
-            background-color: transparent;
-    
-            .text-danger {
-                position: absolute;
-                
-                &::before {
-                    content: "* ";
-                }
             }
         }
     }
