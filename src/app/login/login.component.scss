@@ -7,6 +7,9 @@
 .login-header{
     border-bottom: 2px solid deepskyblue;
 }
+.forbidden{
+    font-size: 16px;
+}
 .form-signin {
     width: 100%;
     max-width: 330px;
@@ -45,6 +48,8 @@
     color: white;
 }
 .text-danger {
+    font-size: 16px;
+
     &::before {
         content: "* ";
     }

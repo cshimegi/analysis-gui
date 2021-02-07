@@ -1,6 +1,11 @@
 <form class="form-signin" [formGroup]="form" (ngSubmit)="onSubmit()">
   <img class="mb-4 signin-logo">
   <h1 class="h3 mb-3 font-weight-normal login-header">Please sign in</h1>
+  <div *ngIf="isSubmittedError"
+       class="invalid-feedback"
+       [ngStyle]="{'display': isSubmittedError ? 'inline-block' : 'none'}">
+    <span class="text-danger forbidden">User name or password is wrong!</span>
+  </div>
   <label for="input-name" class="sr-only">User Name</label>
   <input type="text"
          id="input-name"
@@ -11,16 +16,16 @@
          autofocus
          formControlName="name">
   <div *ngIf="isSubmitted && f.name.errors" class="invalid-feedback">
-    <small class="text-danger" *ngIf="f.name.errors.required">Name is required<br></small>
-    <small class="text-danger" *ngIf="f.name.errors.minlength">
+    <span class="text-danger" *ngIf="f.name.errors.required">Name is required<br></span>
+    <span class="text-danger" *ngIf="f.name.errors.minlength">
       At least {{f.name.errors.minlength.requiredLength}} characters are required<br>
-    </small>
-    <small class="text-danger" *ngIf="f.name.errors.maxlength">
+    </span>
+    <span class="text-danger" *ngIf="f.name.errors.maxlength">
       At most {{f.name.errors.maxlength.requiredLength}} characters are supported<br>
-    </small>
-    <small class="text-danger" *ngIf="f.name.errors.pattern">
+    </span>
+    <span class="text-danger" *ngIf="f.name.errors.pattern">
       Only alphabet, numbers, hyphen and underscore are supported
-    </small>
+    </span>
   </div>
   <label for="input-password" class="sr-only">Password</label>
   <input type="password"
@@ -31,10 +36,10 @@
          required
          formControlName="password">
   <div *ngIf="isSubmitted && f.password.errors" class="invalid-feedback">
-    <small class="text-danger" *ngIf="f.password.errors.required">Password is required<br></small>
-    <small class="text-danger" *ngIf="f.password.errors.minlength">
+    <span class="text-danger" *ngIf="f.password.errors.required">Password is required<br></span>
+    <span class="text-danger" *ngIf="f.password.errors.minlength">
       At least {{f.password.errors.minlength.requiredLength}} characters are required
-    </small>
+    </span>
   </div>
   <div class="checkbox mb-3">
     <label>
