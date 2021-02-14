@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { ChartService, DateService } from '@app/_services_';
+import { DateService, BarChartService } from '@app/_services_';
 import { UserLog } from '@app/_models_';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -27,7 +27,7 @@ export class SyslogComponent implements AfterViewInit, OnInit {
     currentPage: PageEvent;
 
     constructor(
-        private chartServie: ChartService,
+        private barChartServie: BarChartService,
         private userRepoService: UserRepositoryService,
         private dateService: DateService
     ) {
@@ -55,7 +55,6 @@ export class SyslogComponent implements AfterViewInit, OnInit {
             this.getLogs();
         });
         this.paginator.page.subscribe((page: PageEvent) => {
-            console.log(page)
             this.currentPage = page;
             this.getLogs();
         });
@@ -77,7 +76,8 @@ export class SyslogComponent implements AfterViewInit, OnInit {
                     this.userLogs = logs;
                     this.userLogDataSource = new MatTableDataSource(logs);
                     this.userLogDataSource.paginator = this.paginator;
-                    this.drawLineChart();
+                    
+                    this.drawBarChart();
                 },
                 (error: HttpErrorResponse) => {
                     console.error("Error => ", error);
@@ -112,46 +112,64 @@ export class SyslogComponent implements AfterViewInit, OnInit {
     /**
      * Draw line chart of user activity
      */
-    drawLineChart(): void
+    drawBarChart(): void
     {
-        let accessData = this.getAccessAmountFromUserLog();
-        const data = {
-            labels: accessData.map(x => x.datetime),
-            datasets: [{
-                labels: [],
-                fill: false, // don't fill underneath line
-                borderColor: '#FF5376', // line color
-                borderWidth: 3, // 
-                pointRadius: 5,
-                pointHoverRadius: 10,
-                data: accessData.map(x => x.amount)
-            }]
+        const data = this.getAccessAmountFromUserLog();
+        const options = {
+            width: 1200,
+            height: 300
         };
-        this.chartServie.initCanvas('chart-canvas')
+
+        this.barChartServie
+            .setOptions(options)
+            .setViewBox()
             .setData(data)
-            .setOptions({
-                title:{
-                    display: true,
-                    text: 'User Activity',
-                    position: 'top',
-                    fontSize: 18,
-                    fontStyle: 'normal',
-                    fontFamily: 'Century Gothic'
-                },
-                legend: {
-                    display: false
-                },
-                responsive: true,
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            min: 0,
-                            stepSize: 1
-                        }
-                    }]
-                }
-            })
-            .createLineChart();
+            .createSvg("user-log")
+            .initRootLayer()
+            .initAxisLayer()
+            .initTimeAxisX(true)
+            .initAmountAxisY(true)
+            .initRectLayer()
+            .addTitle(this.getChartTitleOptions())
+            .addAxisXLabel(this.getAxisXLabelOptions())
+            .addAxisYLabel(this.getAxisYLabelOptions())
+            .drawAmountTimeChart()
+    }
+
+    private getChartTitleOptions (): any
+    {
+        return {
+            styles: {
+                "text-anchor": "middle",
+                "font-weight": "bold"
+            },
+            content: "User Access"
+        }
+    }
+
+    private getAxisXLabelOptions (): any
+    {
+        return {
+            attrs: {
+                dx: "1em"
+            },
+            styles: {
+                "text-anchor": "middle",
+                "font-weight": "bold"
+            },
+            content: "Date"
+        };
+    }
+
+    private getAxisYLabelOptions (): any
+    {
+        return {
+            styles: {
+                "text-anchor": "middle",
+                "font-weight": "bold"
+            },
+            content: "Nums"
+        };
     }
 
     /**

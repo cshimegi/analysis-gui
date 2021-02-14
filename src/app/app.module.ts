@@ -17,8 +17,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { RegisterComponent } from './register/register.component';
 import { SyslogComponent } from './syslog/syslog.component';
 import { AboutComponent } from './about/about.component';
-import { MonitorComponent } from './monitor/monitor.component';
 import { ScheduleComponent } from './schedule/schedule.component';
+import { VechainComponent } from './vechain/vechain.component';
+import { ScrapyComponent } from './scrapy/scrapy.component';
 
 import { OrderBy } from './_pipes_/orderBy.pipe';
 import { Replace } from './_pipes_/replace.pipe';
@@ -34,11 +35,12 @@ import { ErrorComponent } from './error/error.component';
         RegisterComponent,
         SyslogComponent,
         AboutComponent,
-        MonitorComponent,
+        VechainComponent,
         ScheduleComponent,
         OrderBy,
         Replace,
-        ErrorComponent
+        ErrorComponent,
+        ScrapyComponent
     ],
     imports: [
         BrowserModule,

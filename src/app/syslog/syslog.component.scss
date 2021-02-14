@@ -3,7 +3,12 @@ $commonImagePath: '../../assets/images/common';
 .log-chart {
     width: 80%;
     height: 300px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+}
+svg#user-log {
+    padding: 10px 10px 10px 10px;
+    border: 1px solid gainsboro;
+    background-color: white;
 }
 .log-table {
     width: 80%;
@@ -16,6 +21,6 @@ mat-header-row {
     font-weight: bold;
 }
 .table {
-    max-height: 400px;
-    overflow-y: scroll;
+    max-height: 370px;
+    overflow-y: auto;
 }

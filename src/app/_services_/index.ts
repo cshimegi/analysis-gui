@@ -1,4 +1,4 @@
 export * from "./account";
-export * from "./chart";
+export * from "./charts";
 export * from "./auth";
 export * from "./date";

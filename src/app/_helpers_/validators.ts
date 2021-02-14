@@ -1,4 +1,4 @@
-import { FormGroup, AbstractControl } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 
 /**
  * To validate password and confirm password

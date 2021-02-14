@@ -8,8 +8,9 @@ import { RegisterComponent } from '@app/register';
 import { DashboardComponent } from '@app/dashboard';
 import { AboutComponent } from '@app/about';
 import { ScheduleComponent } from '@app/schedule';
-import { MonitorComponent } from '@app/monitor';
+import { VechainComponent } from '@app/vechain';
 import { SyslogComponent } from '@app/syslog';
+import { ScrapyComponent } from '@app/scrapy';
 
 const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -18,7 +19,8 @@ const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'about', component: AboutComponent, canActivate: [AuthGuard] },
     { path: 'schedule', component: ScheduleComponent, canActivate: [AuthGuard] },
-    { path: 'monitor', component: MonitorComponent, canActivate: [AuthGuard] },
+    { path: 'vechain', component: VechainComponent, canActivate: [AuthGuard] },
+    { path: 'scrapy', component: ScrapyComponent, canActivate: [AuthGuard] },
     { path: 'log', component: SyslogComponent, canActivate: [AuthGuard] },
     // otherwise redirect to dashboard
     { path: '**', redirectTo: '' }
