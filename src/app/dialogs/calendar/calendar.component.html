@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>{{ data.title }}</h2>
+
+<mat-dialog-content>
+  <p class="dialog-message" *ngIf="data.message"> {{ data.message }} </p>
+  <form class="dialog-form-calendar" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Choose One Label</mat-label>
+      <mat-select formControlName="label">
+        <mat-option *ngFor="let el of eventLabels" [value]="el.id">
+          {{ el.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="event-detail" appearance="fill">
+      <mat-label>Detail</mat-label>
+      <textarea matInput
+                placeholder="Event detail"
+                formControlName="detail">
+      </textarea>
+    </mat-form-field>
+    <mat-form-field class="event-triage" appearance="fill">
+      <mat-label>Choose One Triage</mat-label>
+      <mat-select formControlName="triage">
+        <mat-option *ngFor="let et of eventTriages" [value]="et.id">
+          {{ et.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="event-date-range" appearance="fill">
+      <mat-label>Date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker" required>
+          <input matStartDate formControlName="fromTime" placeholder="Start date">
+          <input matEndDate formControlName="toTime" placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <mat-form-field class="event-remind-minutes"
+                    appearance="fill"
+                    *ngIf="doRemindCheckbox.checked">
+      <mat-label>Choose One Remind minutes</mat-label>
+      <mat-select formControlName="remindMinutes">
+        <mat-option *ngFor="let erm of eventRemindMinutes" [value]="erm.id">
+          {{ erm.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-checkbox class="event-do-remind"
+                  #doRemindCheckbox
+                  formControlName="doRemind"
+                  color="primary">
+      Remind me
+    </mat-checkbox>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="shadow" mat-raised-button color="primary" (click)="onSubmit()">
+    {{ data.button.onSubmitText }}
+  </button>
+  <button class="shadow" mat-raised-button (click)="onClose()">
+    {{ data.button.onCloseText }}
+  </button>
+</mat-dialog-actions>

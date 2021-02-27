@@ -40,4 +40,19 @@ export class CalendarRepositoryService extends BaseRepositoryService {
         
         return this.getBy(this.calendarRepo, options);
     }
+
+    /**
+     * Create a new calendar
+     * 
+     * @param params
+     * @returns Error|any
+     */
+    createCalendar (params: any)
+    {
+        const options = {
+            params: params
+        };
+
+        return this.post(this.calendarRepo, options);
+    }
 }

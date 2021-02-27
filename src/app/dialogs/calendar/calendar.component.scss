@@ -1,0 +1,10 @@
+.dialog-form-calendar {
+    display: flex;
+    flex-direction: column;
+}
+
+mat-radio-button {
+    &:not(:last-child) {
+        margin-right: 5px;
+    }
+}

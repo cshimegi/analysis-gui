@@ -1,14 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { DateService } from '@app/_services_';
+import { DateService, CalenderService } from '@app/_services_';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import ja from '@fullcalendar/core/locales/ja';
 import zhTw from '@fullcalendar/core/locales/zh-tw';
-import { Calendar } from '@app/_models_';
-
-declare var $: any;
+import { CalendarRepositoryService } from '@app/_repos_';
+import { Calendar, CalendarList, CalendarEvent, RemindMinutes, Triage } from '@app/_models_';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { CalendarComponent } from '@app/dialogs';
 
 @Component({
     selector: 'app-schedule',
@@ -23,11 +24,14 @@ export class ScheduleComponent implements OnInit, AfterViewInit {
     private readonly externalCssPath: string = "/assets/css/schedule";
     isRemoveChecked: boolean = false;
     options: any;
-    events: Array<any>;
+    events: Array<CalendarEvent>;
     private registedEvents: Array<any>;
 
     constructor (
-        private dateService: DateService
+        private dateService: DateService,
+        private calendarRepoService: CalendarRepositoryService,
+        private CalendarService: CalenderService,
+        private matDialog: MatDialog
     )
     { }
 
@@ -37,8 +41,14 @@ export class ScheduleComponent implements OnInit, AfterViewInit {
         this.registedEvents = this.getRegistedEvents();
         this.options = {
             // themeSystem: 'bootstrap',
+            customButtons: {
+                new: {
+                    text: 'New',
+                    click: this.newEventDialog.bind(this)
+                }
+            },
             headerToolbar: {
-                left: 'prev,next today',
+                left: 'prev,next today new',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
@@ -95,16 +105,9 @@ export class ScheduleComponent implements OnInit, AfterViewInit {
      * 
      * @return draggableMenus
      */
-    getDefaultEvents (): Array<any>
+    getDefaultEvents (): Array<CalendarEvent>
     {
-        return [
-            { id: 1, label: "Breakfast" },
-            { id: 2, label: "Lunch" },
-            { id: 3, label: "Dinner" },
-            { id: 4, label: "Sports" },
-            { id: 5, label: "Travel" },
-            { id: 6, label: "Family" }
-        ];
+        return this.CalendarService.getDefaultEvents();
     }
 
     /**
@@ -114,10 +117,28 @@ export class ScheduleComponent implements OnInit, AfterViewInit {
      */
     getRegistedEvents (): Array<any>
     {
+        // ToDo: custom fields should be storaged extendedProps of event
+
         return [
-            { id: 1, title: 'event 1', date: '2021-02-15' },
-            { id: 2, title: 'event 2', date: '2021-02-20' }
+            { id: 1, groupId: 1, title: 'event 1', start: '2021-02-24', end: '2021-02-26', backgroundColor: Triage[1],extendedProps: {detail: 'test'} },
+            { id: 2, groupId: 2, title: 'event 2', start: '2021-02-27', end: '2021-02-27', extendedProps: {detail: 'test2'} }
         ];
+    }
+
+    private newEventDialog ()
+    {
+        let dialogConfig = new MatDialogConfig();
+        dialogConfig.width = '350px';
+        dialogConfig.data = {
+            title: "New Event",
+            message: "Go ahead to create a new event",
+            button: {
+                onSubmitText: "Send",
+                onCloseText: "Close"
+            }
+        };
+        // dialogConfig.direction = 'rtl';
+        this.matDialog.open(CalendarComponent, dialogConfig);
     }
 
     /**
@@ -139,10 +160,22 @@ export class ScheduleComponent implements OnInit, AfterViewInit {
     handleEventResize (eventInfo): void
     {
         console.log('EventResize', eventInfo)
-        const startDate = eventInfo.event.start;
-        const dateDelta = eventInfo.endDelta;
-        const deltaDays = dateDelta.days;
-        console.log(startDate)
+        let startDate = eventInfo.event.start;
+        let endDate = eventInfo.event.end;
+
+        if (startDate) {
+            startDate = this.dateService.getUnixDatetime(startDate);
+        }
+
+        if (endDate) {
+            endDate = this.dateService.getUnixDatetime(endDate);
+        }
+
+        const CALENDAR = this.getCalendarParams({
+            groupId: eventInfo.event.groupId,
+            fromTime: startDate,
+            toTime: endDate
+        });
     }
 
     /**
@@ -162,8 +195,22 @@ export class ScheduleComponent implements OnInit, AfterViewInit {
      */
     handleEventDrop (eventInfo): void
     {
-        console.log('EventDrop', eventInfo)
-        
+        let startDate = eventInfo.event.start;
+        let endDate = eventInfo.event.end;
+
+        if (startDate) {
+            startDate = this.dateService.getUnixDatetime(startDate);
+        }
+
+        if (endDate) {
+            endDate = this.dateService.getUnixDatetime(endDate);
+        }
+
+        const CALENDAR = this.getCalendarParams({
+            groupId: eventInfo.event.groupId,
+            fromTime: startDate,
+            toTime: endDate
+        });
     }
 
     /**
@@ -173,13 +220,25 @@ export class ScheduleComponent implements OnInit, AfterViewInit {
      */
     handleEventReceive (eventInfo): void
     {
-        console.log('EventReceive');
-        console.log(eventInfo)
         const draggedEl = eventInfo.draggedEl;
-        const eventTypeId = draggedEl.id;
-        const startDate = eventInfo.event.start;
+        const groupId = draggedEl.id;
+        let startDate = eventInfo.event.start;
+        let endDate = eventInfo.event.end;
         
+        if (startDate) {
+            startDate = this.dateService.getUnixDatetime(startDate);
+        }
 
+        if (endDate) {
+            endDate = this.dateService.getUnixDatetime(endDate);
+        }
+
+        const CALENDAR = this.getCalendarParams({
+            groupId: groupId,
+            fromTime: startDate,
+            toTime: endDate
+        });
+        
         this.removeEventAfterDrop(eventInfo);
     }
 
@@ -195,5 +254,20 @@ export class ScheduleComponent implements OnInit, AfterViewInit {
         //   // if so, remove the element from the "Draggable Events" list
         //   eventInfo.draggedEl.parentNode.removeChild(eventInfo.draggedEl);
         // }
+    }
+
+    private getCalendarParams (data: any): Calendar
+    {
+        const params: Calendar = {
+            groupId: data.groupId,
+            detail: data.detail ?? "",
+            triage: data.triage ?? Triage.BLACK,
+            do_remind: data.doRemind ?? false,
+            remind_minutes: data.remindMinutes ?? RemindMinutes.NO_REMIND,
+            from_time: data.fromTime ?? 0,
+            to_time: data.toTime ?? 0
+        };
+
+        return params;
     }
 }

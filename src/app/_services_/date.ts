@@ -10,7 +10,7 @@ export class DateService {
     countAmountPerDay (data: any): Array<any>
     {
         let recordObj = data.reduce((result, datum) => {
-            const day = moment(datum.datetime).format("YYYY-MM-DD");
+            const day = this.formatDatetime(datum.datetime, "YYYY-MM-DD");
             
             if (!result[day]) {
                 result[day] = 0;
@@ -24,13 +24,16 @@ export class DateService {
         let recordArr = [];
 
         for (const [datetime, amount] of Object.entries(recordObj)) {
-            recordArr.push({'datetime': datetime, 'amount': amount});
+            recordArr.push({
+                'datetime': datetime,
+                'amount': amount
+            });
         }
 
         return recordArr;
     }
 
-    getUnixDatetime (datetime?: string): number
+    getUnixDatetime (datetime: string): number
     {
         return moment(datetime).unix();
     }
@@ -50,9 +53,12 @@ export class DateService {
         return this.getPastDatetime(daysAgo).toISOString();
     }
 
-    formatDatetime (datetime: string|number, formate: string = "YYYY/MM/DD"): string
+    formatDatetime (
+        datetime: string|number,
+        format: string = "YYYY/MM/DD",
+        deltaDays: number = 0): string
     {
-        return moment(datetime).format(formate);
+        return moment(datetime).add(deltaDays, 'days').format(format);
     }
 
     getDuration (timeDiff: string): moment.Duration

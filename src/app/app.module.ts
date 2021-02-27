@@ -3,13 +3,10 @@ import { NgModule } from '@angular/core';
 
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-
-import { MatTableModule } from '@angular/material/table';
-import { MatSortModule } from '@angular/material/sort';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { MAT_DATE_FORMATS } from "@angular/material/core";
+import { MATERIAL_MODULES, DATE_FORMATS } from './material.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +24,7 @@ import { Replace } from './_pipes_/replace.pipe';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from '@app/_helpers_';
 import { ErrorComponent } from './error/error.component';
+import { CalendarComponent } from '@app/dialogs';
 
 @NgModule({
     declarations: [
@@ -41,28 +39,33 @@ import { ErrorComponent } from './error/error.component';
         OrderBy,
         Replace,
         ErrorComponent,
-        ScrapyComponent
+        ScrapyComponent,
+        CalendarComponent
     ],
     imports: [
         BrowserModule,
         AppRoutingModule,
         HttpClientModule,
         ReactiveFormsModule,
-        MatTableModule,
-        MatSortModule,
-        MatPaginatorModule,
-        MatProgressSpinnerModule,
         BrowserAnimationsModule,
-        FullCalendarModule
+        FullCalendarModule,
+        ...MATERIAL_MODULES
     ],
     providers: [
         {
             provide: HTTP_INTERCEPTORS,
             useClass: TokenInterceptor,
             multi: true
+        },
+        {
+            provide: MAT_DATE_FORMATS,
+            useValue: DATE_FORMATS
         }
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [
+        CalendarComponent
+    ]
 })
 
 export class AppModule {}

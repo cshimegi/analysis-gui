@@ -6,7 +6,8 @@ import { FormGroup } from "@angular/forms";
  * @param passwordControlName 
  * @param confirmPasswordControlName 
  */
-export function comparePassword() {
+export function comparePassword ()
+{
     return (formGroup: FormGroup) => {
         const passwordControl = formGroup.controls["password"];
         const confirmPasswordControl = formGroup.controls["confirmPassword"];

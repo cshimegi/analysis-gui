@@ -7,10 +7,10 @@ describe('ScheduleComponent', () => {
     let fixture: ComponentFixture<ScheduleComponent>;
 
     beforeEach(waitForAsync(() => {
-            TestBed.configureTestingModule({
-                declarations: [ ScheduleComponent ]
-            })
-            .compileComponents();
+        TestBed.configureTestingModule({
+            declarations: [ ScheduleComponent ]
+        })
+        .compileComponents();
     }));
 
     beforeEach(() => {
