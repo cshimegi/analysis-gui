@@ -80,6 +80,4 @@ Vagrant.configure("2") do |config|
   if Vagrant::Util::Platform.windows? then
     config.vm.provision :shell, :privileged => false, :path => "vagrant-provision/provision-windows.sh"
   end
-
-  config.vm.provision :shell, :privileged => false, :path => "vagrant-provision/ng-build.sh"
 end
