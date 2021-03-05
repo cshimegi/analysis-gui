@@ -4,7 +4,7 @@ sudo apt install net-tools
 echo "====================End of Updating apt-get========================="
 
 echo "==================Update apt-get================================"
-sudo apt install apache2
+sudo apt install -y apache2
 sudo a2enmod rewrite # enable rewrite engine
 sudo cp /vagrant/vagrant-provision/vhost.conf /etc/apache2/sites-available/angular.conf
 sudo cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf.orig
