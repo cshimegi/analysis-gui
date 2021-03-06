@@ -1,4 +1,4 @@
-# Analysis WEB App with SPA
+# SPA by Angular for data visualization web app
 * Angular 11
 * Apache 2
 * D3.js v6
