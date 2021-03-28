@@ -2,7 +2,7 @@ export class User {
     id        : bigint;
     name      : string;
     email     : string;
-    authority : number;
+    isStaff   : boolean;
     token     : string;
 }
 
@@ -10,7 +10,7 @@ export class PartialUser {
     id            : bigint;
     username      : string;
     email         : string;
-    authority     : number;
+    isStaff       : boolean;
     authorityName : string;
 }
 

@@ -92,7 +92,7 @@ export class SyslogComponent implements AfterViewInit, OnInit {
     private formatResults(results: any): UserLog[]
     {
         return results.map(log => {
-            log.user.authorityName = log.user.authority == 1 ? 'General' : 'Admin';
+            log.user.authorityName = log.user.isStaff ? 'Admin' : 'General';
             log.loggedTime = log['logged_time'];
 
             delete log['logged_time'];
